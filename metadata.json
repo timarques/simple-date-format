@@ -1,9 +1,9 @@
 {
-  "uuid": "panel-date-format@keiii.github.com",
-  "name": "Panel Date Format",
-  "description": "Allows to customize the date format on the panel.",
-  "url": "https://github.com/KEIII/gnome-shell-panel-date-format",
-  "shell-version": ["3.28"],
-  "settings-schema": "org.gnome.shell.extensions.panel-date-format",
+  "uuid": "simple-date-format@timarques.github.com",
+  "name": "Simple Date Format",
+  "description": "Change date format.",
+  "url": "https://github.com/timarques/simple-date-format",
+  "shell-version": ["3.30"],
+  "settings-schema": "org.gnome.shell.extensions.simple-date-format",
   "version": 1
 }
