@@ -4,6 +4,7 @@ const main = imports.ui.main;
 const Clutter = imports.gi.Clutter;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+const format = '%Y.%m.%d %H:%M';
 
 let originalClockDisplay;
 let formatClockDisplay;
@@ -19,8 +20,9 @@ function init() {
 function enable() {
   originalClockDisplay.hide();
   originalClockDisplay.get_parent().insert_child_below(formatClockDisplay, originalClockDisplay);
-  timeoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, function(){
-    formatClockDisplay.set_text(new Date().toLocaleFormat('%Y.%m.%d %H:%M'));
+  formatClockDisplay.set_text(new Date().toLocaleFormat(format));
+  timeoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 60000, function(){
+    formatClockDisplay.set_text(new Date().toLocaleFormat(format));
     return true;
   });
 }
