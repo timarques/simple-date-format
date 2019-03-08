@@ -4,6 +4,5 @@
   "description": "Change date format.",
   "url": "https://github.com/timarques/simple-date-format",
   "shell-version": ["3.30"],
-  "settings-schema": "org.gnome.shell.extensions.simple-date-format",
   "version": 1
 }
