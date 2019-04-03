@@ -3,6 +3,6 @@
   "name": "Simple Date Format",
   "description": "Change date format.",
   "url": "https://github.com/timarques/simple-date-format",
-  "shell-version": ["3.30"],
+  "shell-version": ["3.32"],
   "version": 1
 }

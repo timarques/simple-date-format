@@ -1,35 +1,39 @@
-const GLib = imports.gi.GLib;
-const St = imports.gi.St;
-const main = imports.ui.main;
-const Clutter = imports.gi.Clutter;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const format = '%Y.%m.%d %H:%M';
+const {GLib, St, Clutter} = imports.gi;
+const {main} = imports.ui;
 
-let originalClockDisplay;
-let formatClockDisplay;
-let timeoutID = 0;
+class SimpleDateFormat
+{
+	constructor(format)
+	{
+		this.format = format;
+		this.timeoutId = 0;
+		this.originalClockDisplay = main.panel.statusArea.dateMenu._clockDisplay;
+		this.formatClockDisplay = new St.Label({
+			y_align: Clutter.ActorAlign.CENTER,
+		});
+	}
 
-function init() {
-  originalClockDisplay = main.panel.statusArea.dateMenu._clockDisplay;
-  formatClockDisplay = new St.Label({
-    y_align: Clutter.ActorAlign.CENTER,
-  });
+	enable()
+	{
+		this.originalClockDisplay.hide();
+		this.originalClockDisplay.get_parent().insert_child_below(
+			this.formatClockDisplay, this.originalClockDisplay
+		);
+		this.formatClockDisplay.set_text(new Date().toLocaleFormat(this.format));
+		this.timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 60, () => {
+			this.formatClockDisplay.set_text(new Date().toLocaleFormat(this.format));
+			return true;
+		});
+	}
+
+	disable()
+	{
+		GLib.Source.remove(this.timeoutId);
+		this.timeoutId = 0;
+		this.originalClockDisplay.get_parent().remove_child(this.formatClockDisplay);
+		this.originalClockDisplay.show();
+	}
+
 }
 
-function enable() {
-  originalClockDisplay.hide();
-  originalClockDisplay.get_parent().insert_child_below(formatClockDisplay, originalClockDisplay);
-  formatClockDisplay.set_text(new Date().toLocaleFormat(format));
-  timeoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 60000, function(){
-    formatClockDisplay.set_text(new Date().toLocaleFormat(format));
-    return true;
-  });
-}
-
-function disable() {
-  GLib.Source.remove(timeoutID);
-  timeoutID = 0;
-  originalClockDisplay.get_parent().remove_child(formatClockDisplay);
-  originalClockDisplay.show();
-}
+const init = () => new SimpleDateFormat('%Y.%m.%d %H:%M');
